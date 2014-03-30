@@ -1,5 +1,5 @@
-define("core/ajaxLoader", ['jquery','bootstrap'],
-    function ($, bootstrap) {
+define("core/ajaxLoader", ['bootstrap'],
+    function (bootstrap) {
         var _settings = null;
         var methods = {
             init: function (options) {
@@ -23,7 +23,7 @@ define("core/ajaxLoader", ['jquery','bootstrap'],
                                     '</div>',
                                     '<div class="modal-body">',
                                             '<div class="full-block">',
-                                                '<span><img src="/cp-front/img/ajax-loader.gif" /> </span><span id="modalAjaxLoaderText' + settings.prefix + '"></span>',
+                                                '<span><img src="/img/ajax-loader.gif" /> </span><span id="modalAjaxLoaderText' + settings.prefix + '"></span>',
                                             '</div>',
                                     '</div>',
                                 '</div>',

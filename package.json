@@ -1,0 +1,18 @@
+{
+    "name" : "astralinkGrunt",
+    "version" : "0.1.13",
+    "author" : "Shi Wei",
+    "private" : true,
+
+    "devDependencies" : {
+        "grunt" :                       "~0.4.0",
+        "grunt-contrib-cssmin":         "*",
+        "grunt-contrib-requirejs":      "*",
+        "grunt-contrib-sass":           "*",
+        "grunt-contrib-uglify":         "*",
+        "grunt-contrib-watch":          "*",
+        "grunt-cssc":                   "*",
+        "grunt-htmlhint":               "*",
+        "matchdep":                     "*"
+    }
+}

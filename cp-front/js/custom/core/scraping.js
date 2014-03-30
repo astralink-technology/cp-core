@@ -1,5 +1,5 @@
-define("core/scraping", ['jquery'],
-    function ($, crossdomainajax) {
+define("core/scraping", [],
+    function () {
         var _settings = null;
         var methods = {
             init: function (options) {

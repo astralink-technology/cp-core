@@ -1,5 +1,5 @@
-define("image/getImageGrid", ['jquery', 'core/pager'],
-    function ($, pager) {
+define("image/getImageGrid", ['core/pager'],
+    function (pager) {
         var _settings = null;
         var _pagerLoaded = false;
         var _pageSize = 10;

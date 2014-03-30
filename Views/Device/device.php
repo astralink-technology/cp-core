@@ -28,7 +28,7 @@
     <?php
     if ($webConfig->production == true){
         ?>
-        <script data-main="/js/device/device.js" src="/cp-front/js/requireJs/require-jquery.js"></script>
+        <script data-main="/js/device/index-built.js" src="/cp-front/js/requireJs/require-jquery.js"></script>
         <script type="text/javascript">
             var _apiHost  = "<?php echo $webConfig->cpApiHost; ?>";
             var _enterpriseId = "<?php echo $userHelper->getCurrentEnterpriseId(); ?>";
@@ -37,7 +37,7 @@
     <?php
     }else{
     ?>
-        <script data-main="/js/device/device.js" src="/cp-front/js/requireJs/require-jquery.js"></script>
+        <script data-main="/js/device/index.js" src="/cp-front/js/requireJs/require-jquery.js"></script>
         <script type="text/javascript">
             var _apiHost  = "<?php echo $webConfig->cpApiHost; ?>";
             var _enterpriseId = "<?php echo $userHelper->getCurrentEnterpriseId(); ?>";

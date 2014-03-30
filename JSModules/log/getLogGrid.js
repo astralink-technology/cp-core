@@ -1,5 +1,5 @@
-define("log/getLogGrid", ['jquery', 'core/pager'],
-    function ($, pager) {
+define("log/getLogGrid", ['core/pager'],
+    function (pager) {
         var _settings = null;
         var _pagerLoaded = false;
         var _pageSize = 10;

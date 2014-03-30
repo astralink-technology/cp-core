@@ -1,5 +1,5 @@
-define("device/getDeviceGrid", ['jquery', 'core/pager'],
-    function ($, pager) {
+define("device/getDeviceGrid", ['core/pager'],
+    function (pager) {
         var _settings = null;
         var _pagerLoaded = false;
         var _pageSize = 10;

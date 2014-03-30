@@ -29,7 +29,7 @@
 <?php
 if ($webConfig->production == true){
     ?>
-    <script data-main="/js/product/product-registration.js" src="/cp-front/js/requireJs/require-jquery.js"></script>
+    <script data-main="/js/product/product-registration-built.js" src="/cp-front/js/requireJs/require-jquery.js"></script>
     <script type="text/javascript">
         var _apiHost  = "<?php echo $webConfig->cpApiHost; ?>";
         var _enterpriseId = "<?php echo $userHelper->getCurrentEnterpriseId(); ?>";

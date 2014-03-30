@@ -39,7 +39,7 @@
     <?php
         if ($webConfig->production == true){
     ?>
-            <script data-main="/js/account/login.js" src="/cp-front/js/requireJs/require-jquery.js"></script>
+            <script data-main="/js/account/login-built.js" src="/cp-front/js/requireJs/require-jquery.js"></script>
             <script type="text/javascript">
                 var _apiHost = "<?php echo $webConfig->cpApiHost; ?>";
             </script>

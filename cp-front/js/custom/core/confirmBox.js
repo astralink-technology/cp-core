@@ -1,5 +1,5 @@
-define("core/confirmBox", ['jquery','bootstrap'],
-    function ($, bootstrap) {
+define("core/confirmBox", ['bootstrap'],
+    function (bootstrap) {
         var _settings = null;
         var methods = {
             init: function (options) {

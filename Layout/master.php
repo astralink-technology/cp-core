@@ -14,12 +14,15 @@
 <link rel="icon" href="/img/cpico.ico" type="image/x-icon" />
 
 <script type="text/javascript" src="/cp-front/js/jquery-1.9.1/jquery.min.js"></script>
-<!-- development with no internet -->
 <link rel="stylesheet" href="/cp-front/css/font-awesome-4.0.3/css/font-awesome.min.css">
 <link rel="stylesheet" href="/cp-front/js/bootstrap-3.0.2/css/bootstrap.min.css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-<!-- end -->
 
+<?php if ($webConfig->production == false){ ?>
+    <link href="/css/compiled/site-cp-core.css" rel="stylesheet" />
+<?php }else{ ?>
+    <link href="/css/compiled/site-cp-core.min.css" rel="stylesheet" />
+<?php } ?>
 
 <!-- bootstrap -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
@@ -29,15 +32,10 @@
 <link href="/cp-front/js/kendo/styles/kendo.common.min.css" rel="stylesheet" />
 <link href="/cp-front/js/kendo/styles/kendo.default.min.css" rel="stylesheet" />
 
-<link href="/css/compiled/site-cp-core.css" rel="stylesheet" />
-
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/cp-front/js/kendo/js/kendo.web.min.js"></script>
 <script src="/cp-front/js/google-code-prettify/prettify.js"></script>
 <script src="/cp-front/js/google-code-prettify/lang-sql.js"></script>
-
-<script type="text/javascript" src="/cp-front/js/jquery.ba-throttle-debounce.js"></script>
-<script type="text/javascript" src="/cp-front/js/jquery.scrollTo.js"></script>
 
 <script type="text/javascript" src="/js/main.js"></script>
 
