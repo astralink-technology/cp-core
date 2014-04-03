@@ -23,8 +23,6 @@ define("phone/getPhoneGrid", ['core/pager'],
                                     '<td>Country Code</td>',
                                     '<td>Code</td>',
                                     '<td>Digits</td>',
-                                    '<td>Entity ID</td>',
-                                    '<td>Device ID</td>',
                                     '<td>Actions</td>',
                                 '</tr>',
                             '</thead>',
@@ -62,8 +60,6 @@ define("phone/getPhoneGrid", ['core/pager'],
                                         "<td>" + phoneData.countryCode + "</td>" +
                                         "<td>" + phoneData.code + "</td>" +
                                         "<td>" + phoneData.digits + "</td>" +
-                                        "<td>" + phoneData.entityId + "</td>" +
-                                        "<td>" + phoneData.deviceId + "</td>" +
                                         "<td>" +
                                             "<a class='btn btn-link btn-xs' href='javascript:void(0)'><i class='fa fa-edit'></i></a>" +
                                             "<a class='btn btn-link btn-xs' href='javascript:void(0)'><i class='fa fa-trash-o'></i></a>" +
