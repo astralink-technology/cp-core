@@ -1,5 +1,5 @@
-define("address/getAddressGrid", ['core/pager'],
-    function (pager) {
+define("address/getAddressGrid", ['jquery', 'core/pager'],
+    function ($, pager) {
         var _settings = null;
         var _pagerLoaded = false;
         var _pageSize = 10;

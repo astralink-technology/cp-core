@@ -1,5 +1,5 @@
-define("media/getMediaGrid", ['core/pager'],
-    function (pager) {
+define("media/getMediaGrid", ['jquery', 'core/pager'],
+    function ($, pager) {
         var _settings = null;
         var _pagerLoaded = false;
         var _pageSize = 10;

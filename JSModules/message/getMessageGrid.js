@@ -1,5 +1,5 @@
-define("message/getMessageGrid", ['core/pager'],
-    function (pager) {
+define("message/getMessageGrid", ['jquery', 'core/pager'],
+    function ($, pager) {
         var _settings = null;
         var _pagerLoaded = false;
         var _pageSize = 10;

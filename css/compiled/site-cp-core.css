@@ -466,10 +466,17 @@ table {
         font-weight: 600; }
 
 /* overrides */
+.modal-content {
+  float: left;
+  display: block; }
+  .modal-content .form-group {
+    float: left;
+    width: 100%; }
+
 .modal-body {
+  float: left;
   padding: 8px 20px 0px 20px; }
   .modal-body .full-block {
-    float: none;
     margin: 0px 0px 12px 0px; }
 
 /* alerts */
