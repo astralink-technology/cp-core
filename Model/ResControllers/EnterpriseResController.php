@@ -24,7 +24,6 @@ class cp_EnterpriseResController
         if (isset($_GET['Code'])){ $code = $_GET['Code']; };
         if (isset($_GET['PageSize'])){ $pageSize = $_GET['PageSize']; };
         if (isset($_GET['SkipSize'])){ $skipSize = $_GET['SkipSize']; };
-        if (isset($_GET['Strict'])){ $strict = $_GET['Strict']; };
 
         //get the json formatted data
         $enterpriseDb = new cp_enterprise_dao();

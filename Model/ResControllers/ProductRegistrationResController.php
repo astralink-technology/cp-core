@@ -67,7 +67,7 @@ class cp_ProductRegistrationResController
         if (isset($_GET['ProductRegistrationId'])){ $productRegistrationId= $_GET['ProductRegistrationId']; };
         if (isset($_GET['Status'])){ $status = $_GET['Status']; };
         if (isset($_GET['Type'])){ $type = $_GET['Type']; };
-        if (isset($_GET['ProductId'])){ $prodauctId = $_GET['ProductId']; };
+        if (isset($_GET['ProductId'])){ $productId = $_GET['ProductId']; };
         if (isset($_GET['OwnerId'])){ $ownerId = $_GET['OwnerId']; };
         if (isset($_GET['PageSize'])){ $pageSize = $_GET['PageSize']; };
         if (isset($_GET['SkipSize'])){ $skipSize = $_GET['SkipSize']; };
