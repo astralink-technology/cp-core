@@ -141,9 +141,9 @@ class cp_message_dao{
                 $messageClass->type = $row["type"];
                 $messageClass->lastUpdate = $row["last_update"];
                 $messageClass->createDate = $row["create_date"];
-      		$messageClass->ownerId = $row["owner_id"];
-      		$messageClass->triggerEvent = $row["trigger_event"];
-      		//$messageClass->totalRows = $row["total_rows"];
+                $messageClass->ownerId = $row["owner_id"];
+                $messageClass->triggerEvent = $row["trigger_event"];
+                //$messageClass->totalRows = $row["total_rows"];
 
                 //add row to table
                 array_push($data, $messageClass);

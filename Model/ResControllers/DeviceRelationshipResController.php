@@ -91,7 +91,7 @@ class cp_DeviceRelationshipResController
     }
 
     /* Getting devices from relationship */
-        public function getEntityDeviceRelationship(){
+    public function getEntityDeviceRelationship(){
         $dataResponse = new cp_resData_helper();
         $databaseHelper = new cp_databaseAdapter_helper();
 
