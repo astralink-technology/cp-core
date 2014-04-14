@@ -1,14 +1,15 @@
 <?php
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Model/Dao/deviceDao.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Model/Dao/deviceValueDao.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Model/Dao/deviceSessionDao.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Model/Dao/deviceRelationshipDao.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Model/Dao/deviceRelationshipValueDao.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Model/Dao/phoneDao.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Helpers/resData_helper.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Helpers/databaseAdapter_helper.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Helpers/encryption_helper.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Helpers/UTCconvertor_helper.php');
+header('Access-Control-Allow-Origin: *');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Model/Dao/deviceDao.php');    
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Model/Dao/deviceValueDao.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Model/Dao/deviceSessionDao.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Model/Dao/deviceRelationshipDao.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Model/Dao/deviceRelationshipValueDao.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Model/Dao/phoneDao.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Helpers/resData_helper.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Helpers/databaseAdapter_helper.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Helpers/encryption_helper.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Helpers/UTCconvertor_helper.php');
 
 class cp_DeviceResController
 {
@@ -33,7 +34,7 @@ class cp_DeviceResController
             $pageSize = null;
             $skipSize = null;
             $enterpriseId = null;
-
+ 
             if (isset($_GET['EnterpriseId'])){ $enterpriseId = $_GET['EnterpriseId']; };
             if (isset($_GET['DeviceId'])){ $deviceId = $_GET['DeviceId']; };
             if (isset($_GET['Name'])){ $name = $_GET['Name']; };
@@ -71,6 +72,7 @@ class cp_DeviceResController
                 , $pageSize
                 , $skipSize
                 , $enterpriseId
+
             );
 
             if ($databaseHelper->hasDataNoError($deviceRes)){
@@ -96,7 +98,7 @@ class cp_DeviceResController
             $pageSize = null;
             $skipSize = null;
             $enterpriseId = null;
-
+ 
             if (isset($_GET['EnterpriseId'])){ $enterpriseId = $_GET['EnterpriseId']; };
             if (isset($_GET['DeviceId'])){ $deviceId = $_GET['DeviceId']; };
             if (isset($_GET['Name'])){ $name = $_GET['Name']; };
@@ -122,6 +124,7 @@ class cp_DeviceResController
                 , $pageSize
                 , $skipSize
                 , $enterpriseId
+
             );
 
             if ($databaseHelper->hasDataNoError($deviceRes)){
@@ -150,6 +153,7 @@ class cp_DeviceResController
                 $ownerId = null;
                 $enterpriseId = null;
 
+
                 if (isset($newDevice['EnterpriseId'])){ $enterpriseId = $newDevice['EnterpriseId']; };
                 if (isset($newDevice['DeviceId'])){ $deviceId = $newDevice['DeviceId']; };
                 if (isset($newDevice['Name'])){ $name = $newDevice['Name']; };
@@ -173,6 +177,7 @@ class cp_DeviceResController
                     , $description
                     , $ownerId
                     , $enterpriseId
+
                 );
 
                 if ($databaseHelper->hasDataNoError($addDeviceRes)){
@@ -214,7 +219,6 @@ class cp_DeviceResController
                 $deviceValueType = null;
                 $hash = null;
                 $salt = null;
-
                 $enterpriseId = null;
 
                 if (isset($newDevice['EnterpriseId'])){ $enterpriseId = $newDevice['EnterpriseId']; };
@@ -236,6 +240,7 @@ class cp_DeviceResController
                 if (isset($newDevice['DeviceValueDescription'])){ $resolution = $newDevice['DeviceValueDescription']; };
                 if (isset($newDevice['DeviceValueType'])){ $resolution = $newDevice['DeviceValueType']; };
                 if (isset($newDevice['Password'])){ $password = $newDevice['Password']; };
+
 
 
                 //get the json formatted data
@@ -308,7 +313,7 @@ class cp_DeviceResController
                 $description = null;
                 $ownerId = null;
                 $enterpriseId = null;
-
+ 
                 if (isset($updateDevice['EnterpriseId'])){ $enterpriseId = $updateDevice['EnterpriseId']; };
                 if (isset($updateDevice['DeviceId'])){ $deviceId = $updateDevice['DeviceId']; };
                 if (isset($updateDevice['Name'])){ $name = $updateDevice['Name']; };
@@ -430,7 +435,7 @@ class cp_DeviceResController
                 $connectedDescription = null;
                 $connectedDeviceValueDescription = null;
 
-                $relationshipName = null;
+		$relationshipName = null;
                 $ownerId = null;
 
                 //Parent Device
@@ -495,19 +500,17 @@ class cp_DeviceResController
                     //if there are existing, check if user is already register to id
                     $getConnectedDeviceRelationshipRes = $deviceRelationshipDb->getDeviceRelationship(
                         null
-			            , $connectedDeviceId
+			, $connectedDeviceId
                         , $ownerId
-                        , null
-                        , null
+			, null
+			, null
                     );
                     if ($getConnectedDeviceRelationshipRes["TotalRowsAvailable"] > 0){
                         //current user is related to this device
                     }else{
                         //add the relationship of the user with the device
                         $createConnectedDeviceRelationshipRes = $deviceRelationshipDb->createDeviceRelationship(
-                            $relationshipName
-                            , $connectedDeviceId
-                            , null
+			    $connectedDeviceId
                             , $ownerId
                         );
                         if ($databaseHelper->hasDataNoError($createConnectedDeviceRelationshipRes)){
@@ -573,8 +576,8 @@ class cp_DeviceResController
                         null
 			, $deviceId
                         , $ownerId
-                        , null
-                        , null
+			, null
+			, null
                     );
                     if ($getDeviceRelationshipRes["TotalRowsAvailable"] > 0){
                         //current user is related to this device
@@ -715,6 +718,7 @@ class cp_DeviceResController
 		}
         }
 
+
         public function getDevicesFromApp(){
             $dataResponse = new cp_resData_helper();
             $databaseHelper = new cp_databaseAdapter_helper();
@@ -752,7 +756,8 @@ class cp_DeviceResController
             return;
         }
 
-        public function updateDeviceFromApp(){
+
+    public function updateDeviceFromApp(){
         $dataResponse = new cp_resData_helper();
         $databaseHelper = new cp_databaseAdapter_helper();
 

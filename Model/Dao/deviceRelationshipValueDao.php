@@ -2,12 +2,12 @@
 /*
  * Device Relationship Value Controller
  */
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Helpers/UTCconvertor_helper.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Helpers/databaseAdapter_helper.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Helpers/idgenerator_helper.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Helpers/sqlconnection_helper.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Model/Classes/DeviceRelationshipValueClass.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Model/Classes/DeviceDetailClass.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Helpers/UTCconvertor_helper.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Helpers/databaseAdapter_helper.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Helpers/idgenerator_helper.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Helpers/sqlconnection_helper.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Model/Classes/DeviceRelationshipValueClass.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Model/Classes/DeviceDetailClass.php');
 
 
 class cp_device_relationship_value_dao{
@@ -22,7 +22,7 @@ class cp_device_relationship_value_dao{
             , $pHash = null
             , $pSalt = null
             , $pDeviceRelationshipId = null
-            , $pDescription = null
+	    , $pDescription = null
             , $pEnterpriseId = null
         ){
 
@@ -174,6 +174,7 @@ class cp_device_relationship_value_dao{
                 , $pDeviceRelationshipId = null
 	            , $pDescription = null
                 , $pEnterpriseId = null
+
             ){
 
         $sqlconnecthelper = new cp_sqlConnection_helper();
@@ -229,7 +230,7 @@ class cp_device_relationship_value_dao{
 
         $sqlconnecthelper = new cp_sqlConnection_helper();
         $connectionString = $sqlconnecthelper->dbConnect(true, $pEnterpriseId); // if nothing is passed in, it will return a connection string
-         $res = pg_query_params($connectionString,
+        $res = pg_query_params($connectionString,
             "SELECT * FROM delete_device_relationship_value(
                 $1
             )"
@@ -305,6 +306,24 @@ class cp_device_relationship_value_dao{
 			$deviceDetailClass->status = "Online";
 		else
 			$deviceDetailClass->status = "Offline";
+
+		$zwaveCode = $code;
+
+		if(strlen($zwaveCode) > 0) // Unexpected behavior would occur with empty strings
+		{
+		  $zwaveCode[0] = 'z'; // This would modify the first character of a string
+		}
+
+		$sqlZwaveStatus = "Select * from monitor where camera_id = '$zwaveCode'";
+
+		$resZwaveStatus = pg_query($connectionStringToOtherDb,$sqlZwaveStatus);
+
+		$rowsZwaveRet = pg_num_rows($resZwaveStatus);
+
+		if($rowsZwaveRet)
+			$deviceDetailClass->zwaveStatus = "Online";
+		else
+			$deviceDetailClass->zwaveStatus = "Offline";
 
                 //add row to table
                 array_push($data, $deviceDetailClass);

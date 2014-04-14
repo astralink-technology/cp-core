@@ -19,6 +19,7 @@ class cp_Device_Details{
     public $lastUpdate;
     public $deviceLastUpdate;
     public $ownerId;
+    public $zwaveStatus;
     public $totalRows;
 
 

@@ -1,10 +1,12 @@
 <?php
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Model/Dao/mediaDao.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Helpers/resData_helper.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Helpers/databaseAdapter_helper.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Helpers/UTCconvertor_helper.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Model/Dao/entityDao.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Model/Dao/deviceDao.php');
+header('Access-Control-Allow-Origin: *');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Model/Dao/mediaDao.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Helpers/resData_helper.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Helpers/databaseAdapter_helper.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Helpers/UTCconvertor_helper.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Model/Dao/entityDao.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Model/Dao/deviceDao.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Helpers/mailSender_helper.php');
 
 class cp_MediaResController
 {
@@ -24,7 +26,7 @@ class cp_MediaResController
         $pageSize = null;
         $skipSize = null;
         $enterpriseId = null;
-
+ 
         if (isset($_GET['EnterpriseId'])){ $enterpriseId = $_GET['EnterpriseId']; };
         if (isset($_GET['MediaId'])){ $MediaId = $_GET['MediaId']; };
         if (isset($_GET['Title'])){ $Title = $_GET['Title']; };
@@ -51,6 +53,7 @@ class cp_MediaResController
                 , $pageSize
                 , $skipSize
                 , $enterpriseId
+
         );
 
         if ($databaseHelper->hasDataNoError($resMedia)){
@@ -83,8 +86,8 @@ class cp_MediaResController
             $OwnerId = null;
             $FileSize = null;
             $enterpriseId = null;
-
-
+ 
+ 
             if (isset($newMedia['EnterpriseId'])){ $enterpriseId = $newMedia['EnterpriseId']; };
             if (isset($newMedia['Title'])){ $Title = $newMedia['Title']; };
             if (isset($newMedia['Type'])){ $Type = $newMedia['Type']; };
@@ -117,6 +120,7 @@ class cp_MediaResController
                 , $OwnerId
                 , $FileSize
                 , $enterpriseId
+
             );
             if ($databaseHelper->hasDataNoError($addMediaRes)){
                 $dataResponse->dataResponse($addMediaRes['Id'], $addMediaRes['ErrorCode'], $addMediaRes['ErrorMessage'], $addMediaRes['Error']);
@@ -156,7 +160,7 @@ class cp_MediaResController
             $OwnerId = null;
             $FileSize = null;
             $enterpriseId = null;
-
+ 
             if (isset($updateMedia['EnterpriseId'])){ $enterpriseId = $updateMedia['EnterpriseId']; };
             if (isset($updateMedia['MediaId'])){ $MediaId = $updateMedia['MediaId']; };
             if (isset($updateMedia['Title'])){ $Title = $updateMedia['Title']; };
@@ -226,7 +230,7 @@ class cp_MediaResController
             if (isset($deleteMedia['MediaId'])){ $mediaId = $deleteMedia['MediaId']; };
 
             //Media Id is required to delete the Media
-            if ($mediaId != null){
+            if ($MediaId != null){
                 //get the json formatted data
                 $mediaDb = new cp_media_dao();
                 $deleteMediaRes = $mediaDb->deleteMedia(
@@ -269,6 +273,8 @@ class cp_MediaResController
             $OwnerId = null;
             $DeviceCode = null;
             $enterpriseId = null;
+	    $Recipient = null;
+	    $Time = null;
 
             if (isset($newMedia['Title'])){ $Title = $newMedia['Title']; };
             if (isset($newMedia['Type'])){ $Type = $newMedia['Type']; };
@@ -282,6 +288,8 @@ class cp_MediaResController
             if (isset($newMedia['ImgUrl4'])){ $ImgUrl4 = $newMedia['ImgUrl4']; };
             if (isset($newMedia['DeviceCode'])){ $DeviceCode = $newMedia['DeviceCode']; };
             if (isset($newMedia['EnterpriseId'])){ $enterpriseId = $newMedia['EnterpriseId']; };
+            if (isset($newMedia['Recipient'])){ $Recipient = $newMedia['Recipient']; };
+            if (isset($newMedia['Time'])){ $Time = $newMedia['Time']; };
 
             $path_parts = pathinfo($_FILES["uploaded_file"]["name"]);
             $FileType = $path_parts['extension'];
@@ -300,32 +308,54 @@ class cp_MediaResController
                 return;
             }
 
+	   if($Recipient){
+           	$mail = new cp_mailSender_helper();
+                $receiverEmail = $Recipient;
+
+                $subject = "Surveillance Motion Alert Notification";
+                $htmlBody = "Dear EyeOrcas User,<br><br> There is motion detected from $DeviceCode at $Time.<br> ";
+                $htmlBody .= "<br><br>Best Regards,<br>";
+                $htmlBody .= "Eye Orcas";
+
+                $mail->sendMailWithAttachment(
+                        null
+            	        , $receiverEmail
+              	   	, true
+                        , $subject
+                        , $htmlBody
+                        , null
+			, $MediaPath
+			, $Filename
+               );
+
+	   }
+
 
             //get the json formatted data
             $deviceRelationshipDb = new cp_device_relationship_dao();
             $entityDeviceRelationshipRes = $deviceRelationshipDb->getEntityDeviceRelationshipValue(
             	null
-            	, null
-            	, null
-            	, $DeviceCode
-            	, null
-            	, null
-            	, null
-            	, null
-            	, null
-            	, null
-            	, null
-            	, null
-            	, null
-            	, null
-                , $enterpriseId
+            	,null
+            	,null
+            	,$DeviceCode
+            	,null
+            	,null
+            	,null
+            	,null
+            	,null
+            	,null
+            	,null
+            	,null
+            	,null
+            	,null
             );
 
             if ($databaseHelper->hasDataNoError($entityDeviceRelationshipRes)){
                 if ($entityDeviceRelationshipRes["TotalRowsAvailable"] > 0){
                     for($r = 0; $r < $entityDeviceRelationshipRes['TotalRowsAvailable']; $r++){
+           		if (isset($newMedia['MediaUrl'])){ $MediaUrl = $newMedia['MediaUrl']; };
                         $deviceRelationshipId = $entityDeviceRelationshipRes["Data"][$r]->deviceRelationshipId;
-			            $ownerId = $entityDeviceRelationshipRes["Data"][$r]->ownerId;
+			$ownerId = $entityDeviceRelationshipRes["Data"][$r]->ownerId;
                         $CopyPath = '/var/www/gallery/' . $ownerId . '/';
                         if(!file_exists($CopyPath))
                         {
@@ -337,7 +367,6 @@ class cp_MediaResController
                             $dataResponse->dataResponse(null, -1, "Failed to Upload", true);
                             return;
                         }
-
                         if ($deviceRelationshipId != null){
                             $MediaUrl = $MediaUrl . $ownerId . "/" . $Filename;
                             //insert a new media
@@ -356,7 +385,6 @@ class cp_MediaResController
                                 , $ImgUrl4
                                 , $deviceRelationshipId
                                 , $FileSize
-                                , $enterpriseId
                             );
                             if ($databaseHelper->hasDataNoError($addMediaRes)){
                                 $dataResponse->dataResponse($addMediaRes['Id'], $addMediaRes['ErrorCode'], $addMediaRes['ErrorMessage'], $addMediaRes['Error']);

@@ -1,9 +1,11 @@
 <?php
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Model/Dao/logDao.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Helpers/resData_helper.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Helpers/databaseAdapter_helper.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Helpers/UTCconvertor_helper.php');
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/Model/Dao/deviceDao.php');
+header('Access-Control-Allow-Origin: *');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Model/Dao/logDao.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Helpers/resData_helper.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Helpers/databaseAdapter_helper.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Helpers/UTCconvertor_helper.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Model/Dao/deviceDao.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/cp-core/Model/Dao/deviceRelationshipDao.php');
 
 class cp_LogResController
 {
@@ -21,7 +23,7 @@ class cp_LogResController
         $pageSize = null;
         $skipSize = null;
         $enterpriseId = null;
-
+ 
         if (isset($_GET['EnterpriseId'])){ $enterpriseId = $_GET['EnterpriseId']; };
         if (isset($_GET['LogId'])){ $logId = $_GET['LogId']; };
         if (isset($_GET['Message'])){ $message = $_GET['Message']; };
@@ -37,13 +39,14 @@ class cp_LogResController
         $logDb = new cp_log_dao();
         $logRes = $logDb->getLog(
                 $logId
-                , $message
-                , $title
-                , $type
-                , $logUrl
-                , $status
-                , $ownerId
+		, $message
+		, $title
+		, $type
+		, $logUrl
+		, $status
+		, $ownerId
                 , $enterpriseId
+
         );
 
         if ($databaseHelper->hasDataNoError($logRes)){
@@ -69,7 +72,7 @@ class cp_LogResController
             $status = null;
             $ownerId = null;
             $enterpriseId = null;
-
+ 
             if (isset($newLog['EnterpriseId'])){ $enterpriseId  = $newLog['EnterpriseId']; };
             if (isset($newLog['Message'])){ $message = $newLog['Message']; };
             if (isset($newLog['Title'])){ $title = $newLog['Title']; };
@@ -81,12 +84,12 @@ class cp_LogResController
             //get the json formatted data
             $logDb = new cp_log_dao();
             $addLogRes = $logDb->createLog(
-                $message
-                , $title
-                , $type
-                , $logUrl
-                , $status
-                , $ownerId
+		$message
+		, $title
+		, $type
+		, $logUrl
+		, $status
+		, $ownerId
                 , $enterpriseId
             );
 
@@ -114,6 +117,7 @@ class cp_LogResController
             $jsonPost = $_POST['json'];
             $updateLog = json_decode($jsonPost, true);
 
+
             $logId = null;
             $message = null;
             $title = null;
@@ -122,7 +126,7 @@ class cp_LogResController
             $status = null;
             $ownerId = null;
             $enterpriseId = null;
-
+ 
             if (isset($updateLog['EnterpriseId'])){ $enterpriseId = $updateLog['EnterpriseId']; };
             if (isset($updateLog['LogId'])){ $logId = $updateLog['LogId']; };
             if (isset($updateLog['Message'])){ $message = $updateLog['Message']; };
@@ -226,24 +230,30 @@ class cp_LogResController
             if (isset($newLog['DeviceId'])){ $deviceId = $newLog['DeviceId']; };
             if (isset($newLog['DeviceCode'])){ $deviceCode = $newLog['DeviceCode']; };
 
-	    //get the json formatted data
-            $deviceDb = new cp_device_dao();
-            $getEntityDeviceRes = $deviceDb->getEntityDevice(
-                null
-                , null
-                , $deviceCode
-                , null
-                , null
-                , null
-                , null
+            //get the json formatted data
+            $deviceRelationshipDb = new cp_device_relationship_dao();
+            $entityDeviceRelationshipRes = $deviceRelationshipDb->getEntityDeviceRelationshipValue(
+            	null
+            	,null
+            	,null
+            	,$deviceCode
+            	,null
+            	,null
+            	,null
+            	,null
+            	,null
+            	,null
+            	,null
+            	,null
+            	,null
+            	,null
             );
 
-            if ($databaseHelper->hasDataNoError($getEntityDeviceRes)){
-                if ($getEntityDeviceRes["TotalRowsAvailable"] > 0){
-                    for($r = 0; $r < $getEntityDeviceRes['TotalRowsAvailable']; $r++){
-                        $entityId = $getEntityDeviceRes["Data"][$r]->entityId;
-                        $deviceId = $getEntityDeviceRes["Data"][$r]->deviceId;
-                        if ($deviceId != null){
+            if ($databaseHelper->hasDataNoError($entityDeviceRelationshipRes)){
+                if ($entityDeviceRelationshipRes["TotalRowsAvailable"] > 0){
+                    for($r = 0; $r < $entityDeviceRelationshipRes['TotalRowsAvailable']; $r++){
+                        $deviceRelationshipId = $entityDeviceRelationshipRes["Data"][$r]->deviceRelationshipId;
+                        if ($deviceRelationshipId != null){
 			    $logDb = new cp_log_dao();
 			    $addLogRes = $logDb->createLog(
 				$message
@@ -251,8 +261,7 @@ class cp_LogResController
 				, $type
 				, $logUrl
 				, $status
-				, $entityId
-				, $deviceId
+				, $deviceRelationshipId
 			    );
 
 			    if ($databaseHelper->hasDataNoError($addLogRes)){
@@ -266,7 +275,6 @@ class cp_LogResController
                             $dataResponse->dataResponse(null, -1, "Failed to add Log", true);
                             return;
                         }
-			//error_log($r);
                     }
                 }else{
                     $dataResponse->dataResponse(null, -1, "No Device Found", true);

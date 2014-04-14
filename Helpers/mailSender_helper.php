@@ -147,5 +147,96 @@ class cp_mailSender_helper extends webConfig{
         }
         return 'Message has been sent';
     }
+
+
+    public function sendMailWithAttachment(
+            $receiverName
+            , $receiverEmail
+            , $isHtml
+            , $subject
+            , $htmlBody
+            , $plainTextBody
+	    , $attachmentPath
+	    , $attachmentName
+            ){
+
+        $mail = new PHPMailer;
+        $this->initializeMailSender();
+        
+        if ($receiverEmail == null){
+            return 'Please specify a recepient before sending';
+        }
+        if ($this->host == null){
+            return 'Please specify a Host';
+        }else{
+            $mail->Host = $this->host;
+        }
+        if ($this->username == null || $this->password == null){
+            return 'Please specify username and password for host';
+        }else{
+            $mail->Username = $this->username;
+            $mail->Password = $this->password;
+        }
+        if ($this->from == null ){
+            return 'Please specify a sender';
+        }else{
+            $mail->From =  $this->from;
+            if ($this->fromName == null){
+                $mail->FromName = "(Unknown)";
+            }else{
+                $mail->FromName = $this->fromName;
+            }
+        }
+        if ($this->addReplyTo != null){
+            if ($this->addReplyName == null){
+                return 'Please specify the name of the replied receiver if you are using reply to function';
+            }else{
+                $mail->addReplyTo($this->addReplyTo, $this->addReplyName);
+            }
+        } 
+        if ($this->addReplyTo != null){
+            
+        } 
+        if ($this->smtpSecure != null){           
+            $mail->SMTPSecure = $this->smtpSecure;
+        }
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        
+        //Set the subject
+        if ($subject != null){
+            $mail->Subject = $subject;
+        }else{
+             $mail->Subject = "(No Subject)";
+        }
+        //Set receipient
+        if ($receiverName != null){
+            $mail->addAddress($receiverEmail, $receiverName);  // Add a recipient
+        }else{
+            $mail->addAddress($receiverEmail);  // Add a recipient
+        }
+        //Determine message type
+        if ($isHtml == true){
+            //sending as html body
+            $mail->isHTML(true);
+            $mail->Body = $htmlBody; //html body
+        }else{
+            //sending as plain text body
+            $mail->isHTML(false);
+            $mail->Body = $plainTextBody;
+        }  
+
+        //Set attachment
+        if ($attachmentPath != null){
+		$mail->AddAttachment( $attachmentPath , $attachmentName );
+        }              
+
+        if(!$mail->send()) {
+           return 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo;
+           exit;
+        }
+        return 'Message has been sent';
+    }
 }
 ?>
