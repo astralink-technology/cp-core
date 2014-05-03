@@ -226,8 +226,6 @@ class cp_LogResController
             if (isset($newLog['Type'])){ $type = $newLog['Type']; };
             if (isset($newLog['LogUrl'])){ $logUrl = $newLog['LogUrl']; };
             if (isset($newLog['Status'])){ $status = $newLog['Status']; };
-            if (isset($newLog['EntityId'])){ $entityId = $newLog['EntityId']; };
-            if (isset($newLog['DeviceId'])){ $deviceId = $newLog['DeviceId']; };
             if (isset($newLog['DeviceCode'])){ $deviceCode = $newLog['DeviceCode']; };
 
             //get the json formatted data
